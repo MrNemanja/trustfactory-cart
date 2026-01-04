@@ -15,7 +15,7 @@ class ProductSeeder extends Seeder
     {
           Product::insert([
             ['name' => 'T-shirt', 'price' => 19.99, 'stock_quantity' => 20, 'created_at' => now(), 'updated_at' => now()],
-            ['name' => 'Shoe', 'price' => 49.99, 'stock_quantity' => 15, 'created_at' => now(), 'updated_at' => now()],
+            ['name' => 'Shoes', 'price' => 49.99, 'stock_quantity' => 15, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Shorts', 'price' => 14.99, 'stock_quantity' => 30, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Scarf', 'price' => 39.99, 'stock_quantity' => 10, 'created_at' => now(), 'updated_at' => now()],
             ['name' => 'Cap', 'price' => 9.99, 'stock_quantity' => 50, 'created_at' => now(), 'updated_at' => now()],
