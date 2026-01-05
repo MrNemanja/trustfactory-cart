@@ -32,5 +32,41 @@ class CartController extends Controller
 
         return response()->json($cart->load('items.product'));
     }
+
+    #Update product quantity
+    public function update(Request $request, $id)
+    {
+        $user = Auth::user();
+        $cartItem = CartItem::whereHas('cart', fn($q) => $q->where('user_id', $user->id))
+                            ->where('id', $id)
+                            ->firstOrFail();
+
+        $cartItem->quantity = $request->quantity;
+        $cartItem->save();
+
+        return response()->json($cartItem->cart->load('items.product'));
+    }
+
+    #Remove item
+    public function remove($id)
+    {
+        $user = Auth::user();
+        $cartItem = CartItem::whereHas('cart', fn($q) => $q->where('user_id', $user->id))
+                            ->where('id', $id)
+                            ->firstOrFail();
+
+        $cartItem->delete();
+
+        return response()->json(['message' => 'Item removed']);
+    }
+
+    #Show cart
+    public function index()
+    {
+        $user = Auth::user();
+        $cart = $user->cart?->load('items.product');
+
+        return response()->json($cart);
+    }
     
 }
