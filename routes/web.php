@@ -5,9 +5,16 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 Route::get('/', function () {
+    
+    if (Auth::check()) {
+       
+        return redirect()->route('products.page');
+    }
+
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
@@ -16,11 +23,12 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+     Route::get('/products', function() {
+        return Inertia::render('Products/Index');
+    })->name('products.page');
 
     //Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -28,13 +36,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //Products
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/cart-api/products', [ProductController::class, 'index']);
 
-     // Cart
-    Route::get('/cart', [CartController::class, 'show'])->name('cart.show');
-    Route::post('/cart/items', [CartController::class, 'add'])->name('cart.add');
-    Route::put('/cart/items/{id}', [CartController::class, 'update'])->name('cart.update');
-    Route::delete('/cart/items/{id}', [CartController::class, 'remove'])->name('cart.remove');
 });
 
 require __DIR__.'/auth.php';
