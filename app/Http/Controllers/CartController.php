@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    #Adding products to cart
+    //Adding products to cart
     public function add(Request $request)
     {
         $user = Auth::user();
@@ -33,7 +33,7 @@ class CartController extends Controller
         return response()->json($cart->load('items.product'));
     }
 
-    #Update product quantity
+    //Update product quantity
     public function update(Request $request, $id)
     {
         $user = Auth::user();
@@ -47,7 +47,7 @@ class CartController extends Controller
         return response()->json($cartItem->cart->load('items.product'));
     }
 
-    #Remove item
+    //Remove item
     public function remove($id)
     {
         $user = Auth::user();
@@ -60,7 +60,7 @@ class CartController extends Controller
         return response()->json(['message' => 'Item removed']);
     }
 
-    #Show cart
+    //Show cart
     public function index()
     {
         $user = Auth::user();

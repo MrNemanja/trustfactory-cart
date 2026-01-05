@@ -7,7 +7,7 @@ use App\Models\Product;
 
 class ProductController extends Controller
 {
-    #Get all products
+    //Get all products
     public function index()
     {
         $products = Product::all();
