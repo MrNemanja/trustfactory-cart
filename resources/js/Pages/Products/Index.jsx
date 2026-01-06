@@ -8,7 +8,7 @@ export default function Products() {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
-        axios.get('/cart-api/products')
+        axios.get(route('products.all'))
             .then(res => setProducts(res.data))
             .catch(err => console.error(err));
     }, []);

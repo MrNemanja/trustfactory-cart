@@ -1,18 +1,18 @@
 import React from 'react';
-import { Link } from '@inertiajs/react';
-import { Inertia } from '@inertiajs/inertia';
+import { Link, router } from '@inertiajs/react';
 
 export default function Navbar() {
+    
     const handleLogout = (e) => {
         e.preventDefault();
-        Inertia.post('/logout');
+        router.post(route('logout'));
     };
 
     return (
         <nav className="bg-gray-800 text-white p-4 flex justify-between items-center">
             <div className="space-x-4">
-                <Link href="/products">Products</Link>
-                <Link href="/cart">Cart</Link>
+                <Link href={route('products.page')}>Products</Link>
+                <Link href={route('cart.page')}>Cart</Link>
             </div>
             <div>
                 <button

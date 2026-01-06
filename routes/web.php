@@ -18,8 +18,6 @@ Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
     ]);
 });
 
@@ -30,13 +28,26 @@ Route::middleware('auth')->group(function () {
         return Inertia::render('Products/Index');
     })->name('products.page');
 
+     Route::get('/cart', function () {
+        return Inertia::render('Cart/Index');
+    })->name('cart.page');
+
     //Profile
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //Products
-    Route::get('/cart-api/products', [ProductController::class, 'index']);
+    Route::get('/cart-api/products', [ProductController::class, 'index'])->name('products.all');
+
+    //Add Product to Cart
+    Route::post('/cart-api/add-items', [CartController::class, 'add'])->name('products.add');
+
+    //Show cart; Remove product from cart; Update quantity 
+    Route::get('/cart-api/show', [CartController::class, 'show'])->name('cart.show');
+    Route::delete('/cart-api/remove', [CartController::class, 'remove'])->name('cart.remove');
+    Route::put('/cart-api/update', [CartController::class, 'update'])->name('cart.update');
+    
 
 });
 

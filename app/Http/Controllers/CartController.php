@@ -30,29 +30,29 @@ class CartController extends Controller
             ]);
         }
 
-        return response()->json($cart->load('items.product'));
+         return response()->json(['success' => true]);
     }
 
     //Update product quantity
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $user = Auth::user();
         $cartItem = CartItem::whereHas('cart', fn($q) => $q->where('user_id', $user->id))
-                            ->where('id', $id)
+                            ->where('id', $request->id)
                             ->firstOrFail();
 
         $cartItem->quantity = $request->quantity;
         $cartItem->save();
 
-        return response()->json($cartItem->cart->load('items.product'));
+         return response()->json(['message' => 'Quantity updated successfully'], 200);
     }
 
     //Remove item
-    public function remove($id)
+    public function remove(Request $request)
     {
         $user = Auth::user();
         $cartItem = CartItem::whereHas('cart', fn($q) => $q->where('user_id', $user->id))
-                            ->where('id', $id)
+                            ->where('id', $request->id)
                             ->firstOrFail();
 
         $cartItem->delete();
@@ -61,7 +61,7 @@ class CartController extends Controller
     }
 
     //Show cart
-    public function index()
+    public function show()
     {
         $user = Auth::user();
         $cart = $user->cart?->load('items.product');
