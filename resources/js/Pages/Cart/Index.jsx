@@ -32,6 +32,19 @@ export default function CartIndex() {
         }
     };
 
+    const handleCheckout = async () => {
+        try {
+            await axios.post(route('cart.buy'), {
+                items: items.map(item => ({ id: item.id, quantity: item.quantity }))
+            });
+            alert('Purchase completed!');
+            setItems([]);
+        } catch (error) {
+            console.error(error);
+            alert('Failed to complete purchase');
+        }
+    }
+
     const handleQuantityChange = (id, newQuantity) => {
         setItems(prevItems =>
             prevItems.map(item =>
@@ -105,6 +118,15 @@ export default function CartIndex() {
 
                     <div className="text-right font-bold text-lg">
                         Total: ${total.toFixed(2)}
+                    </div>
+                    <div className="text-right mt-4">
+                        <button
+                            onClick={handleCheckout}
+                            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 font-semibold"
+                            disabled={items.length === 0}
+                        >
+                            Buy
+                        </button>
                     </div>
                 </div>
             )}

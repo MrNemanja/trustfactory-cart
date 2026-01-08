@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Jobs\CheckLowStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -44,7 +45,7 @@ class CartController extends Controller
         $cartItem->quantity = $request->quantity;
         $cartItem->save();
 
-         return response()->json(['message' => 'Quantity updated successfully'], 200);
+        return response()->json(['message' => 'Quantity updated successfully'], 200);
     }
 
     //Remove item
@@ -67,6 +68,31 @@ class CartController extends Controller
         $cart = $user->cart?->load('items.product');
 
         return response()->json($cart);
+    }
+
+    //Buy products
+    public function buy(Request $request)
+    {
+        $user = Auth::user();
+
+        foreach($request->items as $itemData) {
+            $cartItem = CartItem::whereHas('cart', fn($q) => $q->where('user_id', $user->id))
+                        ->where('id', $itemData['id'])
+                        ->firstOrFail();
+
+            $product = $cartItem->product;
+
+            $product->stock_quantity -= $itemData['quantity'];
+            $product->save();
+
+            if ($product->stock_quantity <= config('cart.low_stock_threshold')) {
+                CheckLowStock::dispatch($product);
+            }
+
+            $cartItem->delete();
+        }
+
+        return response()->json(['message' => 'Checkout completed']);
     }
     
 }

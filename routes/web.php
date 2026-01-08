@@ -19,7 +19,7 @@ Route::get('/', function () {
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
     ]);
-});
+})->name('welcome');
 
 
 Route::middleware('auth')->group(function () {
@@ -47,6 +47,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/cart-api/show', [CartController::class, 'show'])->name('cart.show');
     Route::delete('/cart-api/remove', [CartController::class, 'remove'])->name('cart.remove');
     Route::put('/cart-api/update', [CartController::class, 'update'])->name('cart.update');
+
+    //Buy products
+    Route::post('/cart-api/buy', [CartController::class, 'buy'])->name('cart.buy');
     
 
 });
