@@ -1,7 +1,7 @@
 import React from 'react';
-import { Link, Head } from '@inertiajs/react';
+import { Link, Head} from '@inertiajs/react';
 
-export default function Welcome({ canLogin, canRegister }) {
+export default function Welcome({ canLogin, canRegister}) {
     return (
         <>
             <Head title="Welcome "/>

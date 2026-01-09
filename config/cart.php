@@ -2,7 +2,7 @@
 
 return [
 
-    'low-stock-threshhold' => 5,
+    'low-stock-threshold' => 5,
     'admin-email' => 'admin@example.com',
 ];
 

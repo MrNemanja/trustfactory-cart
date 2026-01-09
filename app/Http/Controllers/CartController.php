@@ -82,10 +82,14 @@ class CartController extends Controller
 
             $product = $cartItem->product;
 
+            if ($itemData['quantity'] > $product->stock_quantity) {
+                return response()->json(['message' => 'Not enough stock available'], 422);
+            }
+
             $product->stock_quantity -= $itemData['quantity'];
             $product->save();
 
-            if ($product->stock_quantity <= config('cart.low_stock_threshold')) {
+            if ($product->stock_quantity <= config('cart.low-stock-threshold')) {
                 CheckLowStock::dispatch($product);
             }
 

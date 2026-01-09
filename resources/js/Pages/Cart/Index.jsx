@@ -40,15 +40,22 @@ export default function CartIndex() {
             alert('Purchase completed!');
             setItems([]);
         } catch (error) {
-            console.error(error);
-            alert('Failed to complete purchase');
+            if (error.response?.status === 422) {
+                alert(error.response.data.message);
+            } else {
+                alert('Something went wrong');
+            }
         }
     }
 
     const handleQuantityChange = (id, newQuantity) => {
+        const qty = Number.isNaN(newQuantity) || newQuantity < 1
+        ? 1
+        : newQuantity;
+
         setItems(prevItems =>
             prevItems.map(item =>
-                item.id === id ? { ...item, quantity: newQuantity } : item
+                item.id === id ? { ...item, quantity: qty } : item
             )
         );
 
