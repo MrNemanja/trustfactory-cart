@@ -6,6 +6,7 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
 use App\Jobs\CheckLowStock;
+use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -88,6 +89,14 @@ class CartController extends Controller
 
             $product->stock_quantity -= $itemData['quantity'];
             $product->save();
+
+            Sale::create([
+                'user_id' => $user->id,
+                'product_id' => $product->id,
+                'quantity' => $itemData['quantity'],
+                'price' => $product->price,
+            ]);
+
 
             if ($product->stock_quantity <= config('cart.low-stock-threshold')) {
                 CheckLowStock::dispatch($product);
