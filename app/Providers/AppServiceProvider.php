@@ -24,7 +24,7 @@ class AppServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
         $schedule = app(\Illuminate\Console\Scheduling\Schedule::class);
-        $schedule->command('report:daily-sales')->dailyAt('23:59');
+        $schedule->command('report:daily-sales')->everyFiveMinutes();
     }
     }
 }

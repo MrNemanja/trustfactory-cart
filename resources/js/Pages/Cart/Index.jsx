@@ -10,10 +10,11 @@ export default function CartIndex() {
     useEffect(() => {
         axios.get(route('cart.show'))
             .then(res => {
-                setItems(res.data.items);
+                setItems(res.data.items ?? []);
             })
             .catch(err => {
                 console.error(err);
+                setItems([]);
             })
             .finally(() => {
                 setLoading(false);
